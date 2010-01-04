@@ -1,0 +1,50 @@
+rules:
+    -
+        causes:
+            - 
+                name: K
+                factor: 0.5
+            - 
+                name: L
+        goals:
+            - J
+    -
+        causes:
+            -
+                name: F
+            -
+                name: J
+        goals:
+            - M
+    -
+        causes:
+            -
+                name: F
+        goals:
+            - I
+    -
+        causes:
+            -
+                name: L
+            -
+                name: I
+        goals:
+            - N
+    -
+        causes:
+            -
+                name: N
+        goals:
+            - G
+    -
+        causes:
+            -
+                name: M
+        goals:
+            - G
+    -
+        causes:
+            -
+                name: G
+        goals:
+            - H
