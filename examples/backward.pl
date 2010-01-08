@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # 
-# example.pl
+# backward.pl
 # 
 # Author(s): Pablo Fischer (pfischer@cpan.org)
 # Created: 12/13/2009 15:20:43 PST 15:20:43
@@ -19,7 +19,7 @@ my $yaml_kdb = AI::ExpertSystem::Advanced::KnowledgeDB::Factory->new('yaml',
 my $ai = AI::ExpertSystem::Advanced->new(
         viewer_class => 'terminal',
         knowledge_db => $yaml_kdb,
-        goals_to_check => ['H']);
+        goals_to_check => ['J']);
 $ai->backward();
 $ai->summary();
 

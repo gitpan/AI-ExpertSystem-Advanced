@@ -35,7 +35,7 @@ Adding or removing elements from the stack.
 use Moose;
 use List::MoreUtils qw(firstidx);
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 Attributes
 
@@ -91,11 +91,10 @@ sub find {
     my ($self, $look_for, $find_by) = @_;
 
     if (!defined($find_by)) {
-        $find_by = 'name';
-    }
-
-    if ($find_by eq 'id') {
-        return defined $self->{'stack_hash'}->{$look_for};
+        if (defined $self->{'stack_hash'}->{$look_for}) {
+            return $look_for;
+        }
+        return undef;
     }
 
     foreach my $key (keys %{$self->{'stack_hash'}}) {
@@ -104,18 +103,6 @@ sub find {
         }
     }
     return undef;
-}
-
-=head2 B<find_by_name($name)>
-
-A simple wrapper of C<find()>. It will look for the the name of a given item
-in our C<stack_hash>.
-
-=cut
-sub find_by_name {
-    my ($self, $name) = @_;
-
-    return $self->find($name, 'name');
 }
 
 =head2 B<get_value($id, $key)>
@@ -133,7 +120,6 @@ sub get_value {
     my ($self, $id, $key) = @_;
 
     if (!defined $self->{'stack_hash'}->{$id}) {
-        warn "$id does not exist in this dictionary";
         return undef;
     }
     if (defined $self->{'stack_hash'}->{$id}->{$key}) {
@@ -171,6 +157,27 @@ sub prepend {
     return $self->_add($id, 1, @_);
 }
 
+=head2 B<update($id, %extra_keys)>
+
+Updates the I<extra> keys of the element that matches the given C<$id>.
+
+Please note that it will only update or add new keys. So if the given element
+already has a key and this is not provided in C<%extra_keys> then it wont
+be modified.
+
+=cut
+sub update {
+    my ($self, $id, $properties) = @_;
+
+    if (defined $self->{'stack_hash'}->{$id}) {
+        foreach my $key (keys %$properties) {
+            $self->{'stack_hash'}->{$id}->{$key} = $properties->{$key};
+        }
+    } else {
+        warn "Not updating $id, does not exist!";
+    }
+}
+
 =head2 B<remove($id)>
 
 Removes the element that matches the given C<$id> from C<stack_hash> and
@@ -182,13 +189,13 @@ Returns true if the removal is successful, otherwise false is returned.
 sub remove {
     my ($self, $id) = @_;
 
-    if (my $key = $self->find($id)) {
-        delete($self->{'stack_hash'}->{$key});
+    if (defined $self->{'stack_hash'}->{$id}) {
+        delete($self->{'stack_hash'}->{$id});
         # Find the index in the array, lets suppose our arrays are big
         my $index = List::MoreUtils::first_index {
-            defined $_ and $_ eq $key
+            defined $_ and $_ eq $id
         } @{$self->{'stack'}};
-        delete(@{$self->{'stack'}}[$index]);
+        splice(@{$self->{'stack'}}, $index, 1);
         return 1;
     }
     return 0;

@@ -3,11 +3,11 @@ rules:
         causes:
             - 
                 name: K
-                factor: 0.5
             - 
                 name: L
         goals:
-            - J
+            -
+                name: J
     -
         causes:
             -
@@ -15,13 +15,15 @@ rules:
             -
                 name: J
         goals:
-            - M
+            -
+                name: M
     -
         causes:
             -
                 name: F
         goals:
-            - I
+            -
+                name: I
     -
         causes:
             -
@@ -29,22 +31,26 @@ rules:
             -
                 name: I
         goals:
-            - N
+            -
+                name: N
     -
         causes:
             -
                 name: N
         goals:
-            - G
+            -
+                name: G
     -
         causes:
             -
                 name: M
         goals:
-            - G
+            -
+                name: G
     -
         causes:
             -
                 name: G
         goals:
-            - H
+            -
+                name: H
